@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <AssemblyName>Jellyfin.Plugin.NextUpMerge</AssemblyName>
+    <RootNamespace>Jellyfin.Plugin.NextUpMerge</RootNamespace>
+    <Nullable>enable</Nullable>
+    <Optimize>true</Optimize>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <Version>1.0.0.0</Version>
+  </PropertyGroup>
+
+  <!--
+    Jellyfin 10.10 ships on net8.0.
+    We reference the server NuGet packages so we can use Jellyfin's own
+    interfaces (IBaseItemManager, INextUpManager, etc.) without bundling them.
+    All Jellyfin/* packages are marked PrivateAssets="All" so they are NOT
+    copied into the output – Jellyfin provides them at runtime.
+  -->
+  <ItemGroup>
+    <PackageReference Include="Jellyfin.Model"          Version="10.10.*" PrivateAssets="All" />
+    <PackageReference Include="Jellyfin.Controller"     Version="10.10.*" PrivateAssets="All" />
+    <PackageReference Include="MediaBrowser.Common"     Version="10.10.*" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" PrivateAssets="All" />
+  </ItemGroup>
+
+</Project>
