@@ -131,6 +131,7 @@ public class ResumeInterceptMiddleware
         var seenSeries = new HashSet<Guid>();
         var seenItems  = new HashSet<Guid>();
         var merged     = new List<BaseItem>();
+        var nuIds      = new HashSet<Guid>();
 
         foreach (var item in cwItems)
         {
@@ -146,6 +147,7 @@ public class ResumeInterceptMiddleware
             if (item is Episode ep && seenSeries.Contains(ep.SeriesId)) continue;
             merged.Add(item);
             seenItems.Add(item.Id);
+            nuIds.Add(item.Id);
             if (item is Episode ep2 && ep2.SeriesId != Guid.Empty)
                 seenSeries.Add(ep2.SeriesId);
         }
@@ -162,6 +164,16 @@ public class ResumeInterceptMiddleware
 
         // 5. Convert to DTOs and return
         var dtos = dtoService.GetBaseItemDtos(paged.ToList(), dtoOptions, user);
+
+        // Clear any residual progress on Next Up items so clients don't show a fake progress bar.
+        foreach (var dto in dtos)
+        {
+            if (nuIds.Contains(dto.Id) && dto.UserData is not null)
+            {
+                dto.UserData.PlaybackPositionTicks = 0;
+                dto.UserData.PlayedPercentage = null;
+            }
+        }
 
         var result = new QueryResult<BaseItemDto>
         {
