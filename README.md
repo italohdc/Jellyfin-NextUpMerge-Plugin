@@ -47,7 +47,7 @@ brew install --cask dotnet-sdk9
 ./build.sh
 ```
 
-### Add plugin to Jellyfin
+#### Add plugin to Jellyfin
 
 Currently, this plugin files must be copied mannually to the Jellyfin plugins folder.
 
